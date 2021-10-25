@@ -1,0 +1,14 @@
+{
+    "extends": [
+        "@ericcrosson/eslint-config"
+    ],
+    "parserOptions": {
+        "sourceType": "module",
+        "ecmaVersion": 2018,
+        "project": "./tsconfig.json"
+    },
+    "parser": "@typescript-eslint/parser",
+    // note you must disable the base rule as it can report incorrect errors
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": ["error"]
+}

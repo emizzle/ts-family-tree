@@ -1,0 +1,3 @@
+ADD_CHILD Queen Bill Male
+ADD_INLAW Queen Flora Bill Female
+GET_RELATIONSHIP Remus Maternal-Aunt
