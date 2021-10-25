@@ -56,7 +56,7 @@ test('parseInput - valid', async (t) => {
 test('parseInput - no commands returned', async (t) => {
   const testPath = './test/test-no-commands.txt'
   const testContents = `
-   `
+               `
   writeFile(testPath, testContents)
   const result = await parseInput(testPath)
   t.assert(result.length === 0, 'wrong number of commands returned')

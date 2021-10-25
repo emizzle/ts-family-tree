@@ -1,3 +1,41 @@
 ADD_CHILD Queen Bill Male
 ADD_INLAW Queen Flora Bill Female
+ADD_CHILD Flora Victoire Female
+ADD_INLAW Flora Ted Victoire Male
+ADD_CHILD Flora Dominique Female
+ADD_CHILD Flora Louis Male
+ADD_CHILD Victoire Remus Male
+
+ADD_CHILD Queen Charlie Male
+
+ADD_CHILD Queen Percy Male
+ADD_INLAW Queen Audrey Percy Female
+ADD_CHILD Audrey Molly Female
+ADD_CHILD Audrey Lucy Female
+
+ADD_CHILD Queen Ronald Male
+ADD_INLAW Queen Helen Ronald Female
+ADD_CHILD Helen Rose Female
+ADD_CHILD Helen Hugo Male
+ADD_INLAW Helen Malfoy Rose Male
+ADD_CHILD Rose Draco Male
+ADD_CHILD Rose Aster Female
+
+ADD_CHILD Queen Ginerva Female
+ADD_INLAW Queen Harry Ginerva Male
+ADD_CHILD Ginerva James Male
+ADD_INLAW Ginerva Darcy James Female
+ADD_CHILD Darcy William Male
+ADD_CHILD Ginerva Albus Male
+ADD_INLAW Ginerva Alice Albus Female
+ADD_CHILD Alice Ron Male
+ADD_CHILD Alice Ginny Female
+ADD_CHILD Ginerva Lily Female
+
 GET_RELATIONSHIP Remus Maternal-Aunt
+GET_RELATIONSHIP Remus Maternal-Uncle
+GET_RELATIONSHIP Ted Siblings
+GET_RELATIONSHIP Dominique Brother-in-Law
+GET_RELATIONSHIP Dominique Sister-in-Law
+
+GET_RELATIONSHIP Rose Maternal-Aunt
