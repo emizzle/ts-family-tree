@@ -1,4 +1,8 @@
-export enum Action {
+export enum UpdateAction {
+  'ADD_CHILD',
+  'ADD_INLAW',
+}
+export enum InputAction {
   'ADD_CHILD',
   'ADD_INLAW',
   'GET_RELATIONSHIP',
@@ -37,56 +41,79 @@ export class Male extends Person {
   wife?: Female
 }
 export class Female extends Person {
-  children?: Person[] = new Array<Person>()
+  children: Person[] = new Array<Person>()
   husband?: Male
 }
-export class InputCommand {
-  action: Action
-  constructor(action: Action) {
+export class UpdateCommand {
+  action: UpdateAction
+  constructor(action: UpdateAction) {
     this.action = action
   }
-}export class AddChildCommand extends InputCommand {
+}
+export class AddChildCommand extends UpdateCommand {
   mothersName: string;
   childsName: string;
   gender: Gender;
   constructor(mothersName: string, childsName: string, gender: Gender) {
-    super(Action.ADD_CHILD);
+    super(UpdateAction.ADD_CHILD);
     this.mothersName = mothersName;
     this.childsName = childsName;
     this.gender = gender;
   }
+  override toString() {
+    return `{
+      action: ${UpdateAction[this.action]},
+      mothersName: ${this.mothersName},
+      childsName: ${this.childsName},
+      gender: ${Gender[this.gender]}
+    }`;
+  }
 }
 export class AddInlawCommand extends AddChildCommand {
-  spousesName: string
+  spousesName: string;
   constructor(mothersName: string, childsName: string, spousesName: string, gender: Gender) {
-    super(mothersName, childsName, gender)
-    this.action = Action.ADD_INLAW
-    this.spousesName = spousesName
+    super(mothersName, childsName, gender);
+    this.action = UpdateAction.ADD_INLAW;
+    this.spousesName = spousesName;
   }
 
   override toString() {
     return `{
-      action: ${this.action},
+      action: ${UpdateAction[this.action]},
       mothersName: ${this.mothersName},
       childsName: ${this.childsName},
-      gender: ${this.gender}
-    }`
+      spousesName: ${this.spousesName},
+      gender: ${Gender[this.gender]}
+    }`;
   }
 }
-export class GetRelationshipCommand extends InputCommand {
+export class QueryCommand {
   name: string
   relationship: Relationship
   constructor(name: string, relationship: Relationship) {
-    super(Action.GET_RELATIONSHIP)
     this.name = name
     this.relationship = relationship
   }
-
-  override toString() {
+  toString() {
     return `{
-      action: ${this.action},
       name: ${this.name},
-      relationship: ${this.relationship}
-    }`
+      relationship: ${Relationship[this.relationship]},
+    }`;
   }
+}
+
+export enum QueryError {
+  UNKNOWN_QUERIER,
+  UNKNOWN_UPDATER,
+  PERSON_NOT_FOUND
+}
+export enum UpdateError {
+  PERSON_NOT_FOUND,
+  CHILD_ADDITION_FAILED,
+  SPOUSE_NOT_FOUND,
+  UNKNOWN_UPDATER
+}
+export enum UpdateResult {
+  CHILD_ADDED,
+  INLAW_ADDED,
 }

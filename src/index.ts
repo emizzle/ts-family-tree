@@ -6,69 +6,64 @@
  */
 
 import { Command } from 'commander'
-import { isErr, isOk, Result } from 'rustic'
-import {
-  Action,
-  AddChildCommand,
-  AddInlawCommand,
-  GetRelationshipCommand,
-} from './common'
-import { parseInput } from './parser'
-import Tree from './tree'
+import { isErr, Result } from 'rustic'
+import { Person, QueryError, UpdateError, UpdateResult } from './common'
+import { ParsedCommands, ParseError, parseInput } from './parser'
+import Tree from './tree/tree'
+import TreeQuerierFactory from './tree/querier/factory'
+import TreeUpdaterFactory from './tree/updater/factory'
 
 const program = new Command()
 program.option('-i, --input-path <path>', 'input file path', './static/input.txt')
 program.parse(process.argv)
-const tree = new Tree()
-parseInput(program.opts()['inputPath']).then((inputCmds) => {
-  for (const inputCmd of inputCmds) {
-    let result = ''
-    switch (inputCmd.action) {
-      case Action.ADD_CHILD:
-        const addChildCmd = <AddChildCommand>inputCmd
-        const addChildResult = tree.addChild(
-          addChildCmd.mothersName,
-          addChildCmd.childsName,
-          addChildCmd.gender,
-        )
-        if (isOk(addChildResult)) {
-          result = 'CHILD_ADDED'
-        } else {
-          result = addChildResult.data
-        }
-        break
-      case Action.ADD_INLAW:
-        let addInlawCmd = <AddInlawCommand>inputCmd
-        const addInlawResult = tree.addInlaw(
-          addInlawCmd.mothersName,
-          addInlawCmd.childsName,
-          addInlawCmd.spousesName,
-          addInlawCmd.gender,
-        )
-        if (isOk(addInlawResult)) {
-          result = 'INLAW_ADDED'
-        } else {
-          result = addInlawResult.data
-        }
-        break
-      case Action.GET_RELATIONSHIP:
-        let getRelCmd = <GetRelationshipCommand>inputCmd
-        const getRelResult = tree.query(getRelCmd.name, getRelCmd.relationship)
-        if (isOk(getRelResult)) {
-          if (getRelResult.data.length === 0) {
-            result = 'NONE'
-          } else {
-            result = getRelResult.data.map((p) => p.name).join(' ')
-          }
-        } else {
-          result = getRelResult.data
-        }
-        break
-    }
-    console.log(`Action: ${JSON.stringify(inputCmd)}`)
-    console.log(`Result: ${result}`)
+
+function logOutput(output: string | undefined) {
+  if (output !== undefined) {
+    console.log(output)
   }
-  console.log(`Tree after action: ${tree.toString()}`)
+}
+function logError(error: string | undefined) {
+  if (error !== undefined) {
+    console.error(error)
+  }
+}
+parseInput(program.opts()['inputPath']).then((result) => {
+  if (isErr(result)) {
+    // TODO: replace .toString with applicable error translation from
+    // layer below
+    logOutput(ParseError[result.data])
+  }
+  const { updateCmds, queryCmds } = <ParsedCommands>result.data
+  const tree = new Tree()
+  const updaterFactory = new TreeUpdaterFactory(tree)
+  const querierFactory = new TreeQuerierFactory(tree)
+  for (const updateCmd of updateCmds) {
+    // TODO: remove me
+    logOutput(`Action: ${updateCmd.toString()}`)
+    const result = updaterFactory.update(updateCmd)
+    if (isErr(result)) {
+      logError(UpdateError[result.data])
+    }
+    logOutput(UpdateResult[result.data])
+  }
+  // TODO: remove me
+  logOutput(`Tree after updates: ${tree.toString()}`)
+
+  for (const queryCmd of queryCmds) {
+    // TODO: remove me
+    logOutput(`Query: ${queryCmd.toString()}`)
+
+    const getRelResult: Result<Person[], QueryError> = querierFactory.query(queryCmd)
+    if (isErr(getRelResult)) {
+      // TODO: replace .toString with applicable error translation from
+      // layer below
+      logOutput(QueryError[getRelResult.data])
+      continue
+    }
+    // query success
+    let people = getRelResult.data
+    logOutput(people.length ? people.map((p) => p.name).join(' ') : 'NONE')
+  }
 })
 /**
  * TODO: document

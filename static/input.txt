@@ -1,8 +1,8 @@
 ADD_CHILD Queen Bill Male
 ADD_INLAW Queen Flora Bill Female
+ADD_CHILD Flora Dominique Female
 ADD_CHILD Flora Victoire Female
 ADD_INLAW Flora Ted Victoire Male
-ADD_CHILD Flora Dominique Female
 ADD_CHILD Flora Louis Male
 ADD_CHILD Victoire Remus Male
 
@@ -34,7 +34,10 @@ ADD_CHILD Ginerva Lily Female
 
 GET_RELATIONSHIP Remus Maternal-Aunt
 GET_RELATIONSHIP Remus Maternal-Uncle
+GET_RELATIONSHIP Remus Paternal-Aunt
+GET_RELATIONSHIP Remus Paternal-Uncle
 GET_RELATIONSHIP Ted Siblings
+GET_RELATIONSHIP Louis Siblings
 GET_RELATIONSHIP Dominique Brother-in-Law
 GET_RELATIONSHIP Dominique Sister-in-Law
 
