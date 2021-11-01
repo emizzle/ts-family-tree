@@ -22,13 +22,20 @@ export default class Tree {
         const female = <Female>child
         let found = Tree.findRecursive(female, predicate)
         if (found) return found
+      } else if (child instanceof Male) {
+        const male = <Male>child
+        if (male.wife !== undefined) {
+          let found = Tree.findRecursive(male.wife, predicate);
+          if (found) return found;
+        }
       }
     }
     return undefined
   }
   find(
     predicate: (person: Person) => boolean,
-  ): { mother: Female; child: Person } | undefined {
+  ): { mother: Female; child: Person; } | undefined {
+
     let root = new Female('root')
     root.children = this.members
     return Tree.findRecursive(root, predicate)

@@ -16,7 +16,7 @@ export default class AddInlawUpdater extends TreeUpdater {
     super(tree)
   }
   override update(cmd: AddInlawCommand): Result<UpdateResult, UpdateError> {
-    const { mothersName, childsName, spousesName, gender } = cmd
+    const { mothersName, childsName: inlawsName, spousesName, gender } = cmd
     const found = this.tree.findByName(mothersName)
     if (found === undefined) {
       return Err(UpdateError.PERSON_NOT_FOUND)
@@ -26,15 +26,18 @@ export default class AddInlawUpdater extends TreeUpdater {
     if (foundSpouse === undefined) {
       return Err(UpdateError.SPOUSE_NOT_FOUND)
     }
+    const { child: spouse } = foundSpouse
     let inlaw: Person
     if (gender === Gender.Female) {
-      let husband = <Male>foundSpouse.child
-      inlaw = new Female(childsName, true)
-      ;(<Female>inlaw).husband = husband
+      const husband: Male = <Male>spouse
+      inlaw = new Female(inlawsName, true)
+        ; (<Female>inlaw).husband = husband;
+      husband.wife = <Female>inlaw
     } else {
-      let wife = <Female>foundSpouse.child
-      inlaw = new Male(childsName, true)
-      wife.husband = inlaw
+      let wife = <Female>spouse
+      inlaw = new Male(inlawsName, true)
+      wife.husband = <Male>inlaw;
+      (<Male>inlaw).wife = wife
     }
     mother.children.push(inlaw)
     return Ok(UpdateResult.INLAW_ADDED)

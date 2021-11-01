@@ -26,9 +26,21 @@ import { tsFamilyTree } from 'ts-family-tree'
 // TODO: describe usage
 ```
 
-## Related
 
-TODO
+## Build
+```
+npm run build
+```
+
+## Run tests
+
+```
+npm test
+```
+
+## Assumptions
+1. Can only query children through a mother (female) and not through a father (male).
+
 
 ## Acknowledgments
 

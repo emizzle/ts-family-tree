@@ -1,4 +1,4 @@
-import { Err, isErr, Ok, Result } from "rustic";
+import { Err, Ok, Result } from "rustic";
 import { Female, Male, Person, QueryError } from "../../common";
 import Tree from "../tree";
 import TreeQuerier from "./base";

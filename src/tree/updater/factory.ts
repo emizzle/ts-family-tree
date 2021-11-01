@@ -1,8 +1,5 @@
 import { Err, Result } from 'rustic'
 import {
-  UpdateAction,
-  Person,
-  QueryError,
   AddChildCommand,
   UpdateCommand,
   AddInlawCommand,

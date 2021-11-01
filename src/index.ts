@@ -43,6 +43,7 @@ parseInput(program.opts()['inputPath']).then((result) => {
     const result = updaterFactory.update(updateCmd)
     if (isErr(result)) {
       logError(UpdateError[result.data])
+      continue
     }
     logOutput(UpdateResult[result.data])
   }
